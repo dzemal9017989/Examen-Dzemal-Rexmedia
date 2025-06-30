@@ -14,8 +14,15 @@ class TaakController extends Controller
     use AuthorizesRequests;
 public function index(Request $request)
 {
-    return $request->user()->taken()->with('status')->get();
+    $user = $request->user();
+
+    if ($user->isAdmin()) {
+        return Taak::with(['status', 'gebruiker'])->get();
+    }
+
+    return $user->taken()->with('status')->get();
 }
+
 
 public function store(Request $request)
 {
@@ -49,15 +56,28 @@ public function show(Taak $taak)
 public function update(Request $request, Taak $taak)
 {
     $this->authorize('update', $taak);
-    $validated = $request->validate([
-        'titel' => 'required|string|max:255',
-        'beschrijving' => 'nullable|string',
-        'status_id' => 'required|exists:statussen,id',
-        'deadline' => 'required|date',
-    ]);
+
+    if ($request->user()->isAdmin()) {
+        // ✅ Admin mag alles updaten
+        $validated = $request->validate([
+            'titel' => 'required|string|max:255',
+            'beschrijving' => 'nullable|string',
+            'status_id' => 'required|exists:statussen,id',
+            'deadline' => 'required|date',
+            'gebruiker_id' => 'required|exists:users,id',
+        ]);
+    } else {
+        // ✅ Gewone gebruiker mag alleen status aanpassen
+        $validated = $request->validate([
+            'status_id' => 'required|exists:statussen,id',
+        ]);
+    }
+
     $taak->update($validated);
     return response()->json($taak);
 }
+
+
 
 
 }

@@ -4,6 +4,7 @@ import LoginView from '../views/Login.vue'
 import TakenView from '@/views/TakenView.vue'
 import Toevoegen from '../views/Toevoegen.vue'
 import Bewerken from '@/views/Bewerken.vue'
+import StatistiekenView from '@/views/StatistiekenView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,8 +38,12 @@ const router = createRouter({
       path: '/bewerken/:id',
       name: 'Bewerken',
       component: Bewerken
+    },
+    {
+      path: '/statistieken',
+      name: 'Statistieken',
+      component: StatistiekenView
     }
-
   ]
 })
 

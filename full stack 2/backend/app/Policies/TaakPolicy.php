@@ -21,7 +21,7 @@ class TaakPolicy
      */
     public function view(User $user, Taak $taak): bool
 {
-    return $user->id === $taak->gebruiker_id;
+    return $user->isAdmin() || $taak->gebruiker_id === $user->id;
 }
 
     /**
@@ -35,17 +35,21 @@ class TaakPolicy
     /**
      * Determine whether the user can update the model.
      */
-public function update(User $user, Taak $taak): bool
+public function update(User $user, Taak $taak)
 {
+    if ($user->isAdmin()) return true;
+
+    // gewone gebruiker mag alleen zijn eigen taakstatus wijzigen
     return $user->id === $taak->gebruiker_id;
 }
+
 
     /**
      * Determine whether the user can delete the model.
      */
 public function delete(User $user, Taak $taak): bool
 {
-    return $user->id === $taak->gebruiker_id;
+    return $user->isAdmin() || $taak->gebruiker_id === $user->id;
 }
 
     /**

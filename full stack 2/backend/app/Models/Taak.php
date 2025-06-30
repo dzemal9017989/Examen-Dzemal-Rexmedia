@@ -22,4 +22,5 @@ class Taak extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
 }

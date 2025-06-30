@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaakController;
+use App\Http\Controllers\Admin\UserBeheerController;
+use App\Http\Controllers\UserController;
 
 // ✅ Login route
 Route::post('/login', [AuthController::class, 'login']);
@@ -12,7 +14,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
     // ✅ Alleen bij token-gebaseerde auth
 if ($request->user()->currentAccessToken()) {
-    $request->user()->currentAccessToken()->delete();
+    $request->user()->tokens()->delete();
 }
 
 return response()->json(['message' => 'Uitgelogd']);
@@ -35,3 +37,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/taken/{taak}', [TaakController::class, 'update']);
 });
 
+Route::delete('/taken/{taak}', [TaakController::class, 'destroy']);
+
+Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
+    Route::get('/admin/users', [UserBeheerController::class, 'index']);
+    Route::post('/admin/users', [UserBeheerController::class, 'store']);
+    // Voeg hier je admin-routes toe
+});
+
+Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'index']);
