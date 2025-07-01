@@ -4,6 +4,6 @@ import TheWelcome from '../components/TheWelcome.vue'
 
 <template>
   <main>
-    
+    <router-link to="/login">Login</router-link>
   </main>
 </template>

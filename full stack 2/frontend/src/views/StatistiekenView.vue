@@ -20,7 +20,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from '@/axios'
+
+const router = useRouter()
 
 const todo = ref(0)
 const bezig = ref(0)
@@ -29,7 +32,8 @@ const afgerond = ref(0)
 const logout = async () => {
   try {
     await axios.post('/api/logout')
-    window.location.href = '/login'
+    await axios.get('/sanctum/csrf-cookie') // Optioneel, voor zekerheid
+    router.push('/login') // ✅ Terug naar loginformulier via router
   } catch (err) {
     console.error('Fout bij uitloggen:', err)
   }

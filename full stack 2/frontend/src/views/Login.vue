@@ -54,15 +54,23 @@ const login = async () => {
 
   try {
     await axios.get('/sanctum/csrf-cookie')
-    await axios.post('/login', {
+    
+    const res = await axios.post('/login', {
       email: email.value,
       password: password.value
     })
+    console.log('✅ Ingelogd:', res.data)
+
+    // 👇 Test of sessie werkt
+    const userRes = await axios.get('/api/user')
+    console.log('👤 Ingelogde gebruiker:', userRes.data)
 
     router.push('/taken')
   } catch (err) {
+    console.error('❌ Login error:', err.response?.data || err.message)
     error.value = 'Inloggen mislukt. Controleer je gegevens.'
   }
 }
+
 
 </script>

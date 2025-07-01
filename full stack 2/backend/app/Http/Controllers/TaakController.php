@@ -28,15 +28,23 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'titel' => 'required|string|max:255',
-        'beschrijving' => 'nullable|string',
-        'status_id' => 'required|exists:statussen,id',
+        'beschrijving' => 'required|string',
+        'status_id' => 'required|integer',
         'deadline' => 'required|date',
+        'gebruiker_id' => 'nullable|exists:users,id',
     ]);
 
-    $taak = $request->user()->taken()->create($validated);
+    // Als admin een taak aanmaakt voor een andere gebruiker
+    if ($request->user()->isAdmin() && isset($validated['gebruiker_id'])) {
+        $taak = Taak::create($validated);
+    } else {
+        // Gewone gebruiker maakt taak voor zichzelf aan
+        $taak = $request->user()->taken()->create($validated);
+    }
 
     return response()->json($taak, 201);
 }
+
 
 public function destroy(Taak $taak)
 {

@@ -5,6 +5,8 @@ import TakenView from '@/views/TakenView.vue'
 import Toevoegen from '../views/Toevoegen.vue'
 import Bewerken from '@/views/Bewerken.vue'
 import StatistiekenView from '@/views/StatistiekenView.vue'
+import UitnodigingenAanmaken from '@/views/UitnodigingenAanmaken.vue'
+import Uitnodiging from '@/views/Uitnodiging.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,7 +45,17 @@ const router = createRouter({
       path: '/statistieken',
       name: 'Statistieken',
       component: StatistiekenView
-    }
+    },
+    {
+      path: '/uitnodigingen',
+      name: 'Uitnodigingen',
+      component: UitnodigingenAanmaken
+    },
+    {
+      path: '/uitnodiging/:token',
+      name: Uitnodiging,
+      component: Uitnodiging
+    },
   ]
 })
 

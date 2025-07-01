@@ -1,48 +1,43 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaakController;
 use App\Http\Controllers\Admin\UserBeheerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GebruikerController;
+use App\Http\Controllers\InvitationController;
 
-// ✅ Login route
+// ✅ Login route (no auth needed)
 Route::post('/login', [AuthController::class, 'login']);
 
-// ✅ Logout route (auth verplicht)
-Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
-    // ✅ Alleen bij token-gebaseerde auth
-if ($request->user()->currentAccessToken()) {
-    $request->user()->tokens()->delete();
-}
+// ✅ Routes that need authentication (using 'auth' not 'auth:sanctum')
+Route::middleware('auth')->group(function () {
+  // User routes
+  Route::get('/user', [AuthController::class, 'user']);
+  Route::post('/logout', [AuthController::class, 'logout']);
 
-return response()->json(['message' => 'Uitgelogd']);
+  // Taken routes
+  Route::get('/taken', [TaakController::class, 'index']);
+  Route::post('/taken', [TaakController::class, 'store']);
+  Route::get('taken/{taak}', [TaakController::class, 'show']);
+  Route::put('/taken/{taak}', [TaakController::class, 'update']);
+  Route::delete('/taken/{taak}', [TaakController::class, 'destroy']);
 
+  // Users routes
+  Route::get('/api/users', [UserController::class, 'index']);
+  Route::get('/invitations/{token}', [InvitationController::class, 'show']);
+  Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept']);
 });
 
-// ✅ Taken-routes voor ingelogde gebruikers
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/taken', [TaakController::class, 'index']);
-    Route::post('/taken', [TaakController::class, 'store']);
-    Route::delete('/taken/{taak}', [TaakController::class, 'destroy']);
+// ✅ Admin routes
+Route::middleware(['auth', 'is_admin'])->group(function () {
+  Route::get('/api/admin/users', [UserBeheerController::class, 'index']);
+  Route::post('/api/admin/users', [UserBeheerController::class, 'store']);
+  Route::get('/admin/invitations', [InvitationController::class, 'index']);
+  Route::post('/admin/invitations', [InvitationController::class, 'store']);
+  Route::delete('/admin/invitations/{id}', [InvitationController::class, 'destroy']);
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth')->get('/users', [GebruikerController::class, 'index']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/taken/{taak}', [TaakController::class, 'show']);
-    Route::put('/taken/{taak}', [TaakController::class, 'update']);
-});
-
-Route::delete('/taken/{taak}', [TaakController::class, 'destroy']);
-
-Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
-    Route::get('/admin/users', [UserBeheerController::class, 'index']);
-    Route::post('/admin/users', [UserBeheerController::class, 'store']);
-    // Voeg hier je admin-routes toe
-});
-
-Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'index']);

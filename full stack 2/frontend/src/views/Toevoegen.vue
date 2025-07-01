@@ -32,6 +32,15 @@
         <label style="font-weight: bold;">Deadline</label>
         <input type="date" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
 
+        <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
+        <select v-if="gebruiker.role === 'admin'" v-model="gebruiker_id" style="width: 100%; margin-bottom: 1rem;">
+        <option disabled value="">-- Kies gebruiker --</option>
+        <option v-for="g in gebruikers" :key="g.id" :value="g.id">
+        {{ g.name }}
+        </option>
+        </select>
+
+
         <!-- Boven de opslaan-knop -->
 <div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">
   {{ error }}
@@ -50,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/axios'
 
@@ -61,7 +70,23 @@ const beschrijving = ref('')
 const status_id = ref(1)
 const deadline = ref('')
 const error = ref('')
+const gebruiker = ref({})
+const gebruikers = ref([])
+const gebruiker_id = ref('')
 
+onMounted(async () => {
+  try {
+    const userRes = await axios.get('/api/user')
+    gebruiker.value = userRes.data
+
+    if (gebruiker.value.role === 'admin') {
+      const res = await axios.get('/api/users')
+      gebruikers.value = res.data
+    }
+  } catch (err) {
+    error.value = 'Kon gebruiker(s) niet ophalen.'
+  }
+})
 
 const logout = async () => {
   await axios.post('/logout')
@@ -69,7 +94,7 @@ const logout = async () => {
 }
 
 const opslaan = async () => {
-  error.value = '';
+  error.value = ''
 
   try {
     const taak = {
@@ -77,19 +102,21 @@ const opslaan = async () => {
       beschrijving: beschrijving.value,
       status_id: status_id.value,
       deadline: deadline.value
-    };
+    }
 
-    await axios.get('/sanctum/csrf-cookie'); // 🔒 nodig voor beveiliging
-    await axios.post('/api/taken', taak); // 📨 verstuur taak
-    router.push('/taken'); // ✅ terug naar lijst
+    if (gebruiker.value.role === 'admin') {
+      taak.gebruiker_id = gebruiker_id.value
+    }
+
+    await axios.get('/sanctum/csrf-cookie')
+    await axios.post('/api/taken', taak)
+    router.push('/taken')
   } catch (err) {
     if (err.response && err.response.status === 422) {
-      error.value = Object.values(err.response.data.errors).flat().join(', ');
+      error.value = Object.values(err.response.data.errors).flat().join(', ')
     } else {
-      error.value = 'Er ging iets mis bij het opslaan.';
+      error.value = 'Er ging iets mis bij het opslaan.'
     }
   }
 }
-
-
 </script>
