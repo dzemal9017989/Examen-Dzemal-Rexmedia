@@ -9,11 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class InvitationController extends Controller
 {
     public function store(Request $request)
     {
+        Log::info('⏳ Start uitnodiging verwerken', $request->all());
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|unique:invitations,email',
@@ -21,14 +24,23 @@ class InvitationController extends Controller
         ]);
 
         try {
+            Log::info('✅ Validatie gelukt');
+
             $invitation = Invitation::create($validated);
-            // Verstuur uitnodiging email
+
+            Log::info('📧 Versturen mail naar ' . $invitation->email);
+
+            // Verstuur de uitnodigingsmail
             Mail::to($invitation->email)->send(new UserInvitation($invitation));
+
+            Log::info('📬 Mail verstuurd');
+
             return response()->json([
                 'message' => 'Uitnodiging verzonden naar ' . $invitation->email,
                 'invitation' => $invitation
             ], 201);
         } catch (\Exception $e) {
+            Log::error('❌ Fout bij versturen uitnodiging: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Fout bij versturen uitnodiging: ' . $e->getMessage()
             ], 500);

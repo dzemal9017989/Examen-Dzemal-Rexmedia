@@ -30,14 +30,15 @@ Route::middleware('auth')->group(function () {
   Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept']);
 });
 
-// ✅ Admin routes
+// Gewijzigd:
 Route::middleware(['auth', 'is_admin'])->group(function () {
-  Route::get('/api/admin/users', [UserBeheerController::class, 'index']);
-  Route::post('/api/admin/users', [UserBeheerController::class, 'store']);
+  Route::get('/admin/users', [UserBeheerController::class, 'index']);
+  Route::post('/admin/users', [UserBeheerController::class, 'store']);
   Route::get('/admin/invitations', [InvitationController::class, 'index']);
   Route::post('/admin/invitations', [InvitationController::class, 'store']);
   Route::delete('/admin/invitations/{id}', [InvitationController::class, 'destroy']);
 });
+
 
 Route::middleware('auth')->get('/users', [GebruikerController::class, 'index']);
 

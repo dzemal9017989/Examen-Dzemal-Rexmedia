@@ -19,6 +19,25 @@
     <!-- MAIN -->
     <main style="padding: 2rem;">
       <h2>Takenlijst</h2>
+<!-- FILTERS -->
+<div style="margin-bottom: 2rem;">
+  <label for="status">Filter op status:</label>
+  <select v-model="statusFilter" id="status" style="margin-right: 2rem;">
+    <option value="">Alle</option>
+    <option value="to do">To do</option>
+    <option value="in behandeling">In behandeling</option>
+    <option value="voltooid">Voltooid</option>
+  </select>
+
+  <label for="deadline">Filter op deadline:</label>
+  <select v-model="deadlineFilter" id="deadline">
+    <option value="">Alle</option>
+    <option value="overdue">Verlopen</option>
+    <option value="today">Vandaag</option>
+    <option value="upcoming">Komende</option>
+  </select>
+</div>
+
       <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
         <thead>
           <tr>
@@ -31,7 +50,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="taak in taken" :key="taak.id" style="border-top: 1px solid black;">
+          <tr v-for="taak in gefilterdeTaken" :key="taak.id" style="border-top: 1px solid black;">
             <td style="padding: 0.5rem; white-space: pre-line;">{{ taak.titel }}</td>
             <td style="padding: 0.5rem; white-space: pre-line;">{{ taak.beschrijving }}</td>
             <td style="padding: 0.5rem;">{{ taak.status.naam }}</td>
@@ -58,13 +77,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from '@/axios'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const taken = ref([])
 const gebruiker = ref({})
+const statusFilter = ref('')
+const deadlineFilter = ref('')
+
 
 // Haal gebruiker en taken op
 onMounted(async () => {
@@ -112,4 +134,24 @@ const bewerkTaak = (id) => {
 const toevoegen = () => {
   router.push('/toevoegen')
 }
+
+const gefilterdeTaken = computed(() => {
+  return taken.value.filter(taak => {
+    const statusMatch = statusFilter.value === '' || taak.status.naam.toLowerCase() === statusFilter.value.toLowerCase()
+
+    const vandaag = new Date().toISOString().split('T')[0]
+    const taakDatum = taak.deadline
+
+    let deadlineMatch = true
+    if (deadlineFilter.value === 'overdue') {
+      deadlineMatch = taakDatum < vandaag
+    } else if (deadlineFilter.value === 'today') {
+      deadlineMatch = taakDatum === vandaag
+    } else if (deadlineFilter.value === 'upcoming') {
+      deadlineMatch = taakDatum > vandaag
+    }
+
+    return statusMatch && deadlineMatch
+  })
+})
 </script>
