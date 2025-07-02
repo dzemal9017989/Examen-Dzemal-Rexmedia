@@ -53,7 +53,7 @@ const router = createRouter({
     },
     {
       path: '/uitnodiging/:token',
-      name: Uitnodiging,
+      name: 'Uitnodiging',
       component: Uitnodiging
     },
   ]

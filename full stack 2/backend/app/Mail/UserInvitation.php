@@ -15,7 +15,7 @@ class UserInvitation extends Mailable
     public function __construct(Invitation $invitation)
     {
         $this->invitation = $invitation;
-        $this->acceptUrl = url("/uitnodiging/{$invitation->token}");
+        $this->acceptUrl = "http://localhost:5173/uitnodiging/{$invitation->token}";
     }
     public function build()
     {
