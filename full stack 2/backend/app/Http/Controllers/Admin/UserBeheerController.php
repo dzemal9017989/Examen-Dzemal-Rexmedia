@@ -11,7 +11,7 @@ class UserBeheerController extends Controller
 {
     public function index()
     {
-        return User::all(); // 👈 eventueel met filtering
+        return User::all();
     }
 
     public function store(Request $request)

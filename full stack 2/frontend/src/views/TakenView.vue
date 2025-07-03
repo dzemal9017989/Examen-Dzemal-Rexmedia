@@ -2,19 +2,23 @@
   <div style="background-color: white; min-height: 100vh; padding: 0; margin: 0;">
     
     <!-- HEADER -->
-    <header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <!---<header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
       <h1 style="color: red; font-size: 2rem; margin: 0;">Suriname</h1>
       <nav style="display: flex; gap: 1rem;">
         <button @click="logout" style="color: red; background: none; border: none; font-weight: bold;">Uitloggen</button>
         <button @click="$router.push('/statistieken')" style="color: red; background: none; border: none; font-weight: bold;">Statistiekenpagina</button>
         <button @click="$router.push('/taken')" style="color: red; background: none; border: none; font-weight: bold;">Takenlijst</button>
       </nav>
-    </header>
+    </header>-->
 
+    <div style="padding: 2 rem;">
     <!-- Toevoegen knop alleen voor admin -->
-    <div v-if="gebruiker.role === 'admin'" style="margin: 1rem; text-align: right;">
-      <button style="background-color: gold; padding: 0.5rem 1rem; font-weight: bold;" @click="toevoegen">Toevoegen</button>
+    <div v-if="authStore.isAdmin" style="margin-bottom: 1rem; text-align: right;">
+      <button style="background-color: gold; padding: 0.5rem 1rem; font-weight: bold;" @click="toevoegen">
+        Toevoegen
+      </button>
     </div>
+  </div>
 
     <!-- MAIN -->
     <main style="padding: 2rem;">
@@ -60,9 +64,21 @@
             <td style="padding: 0.5rem; text-align: right;">
               <!-- Admin mag alles -->
               <template v-if="gebruiker.role === 'admin'">
-                <button style="background-color: gold; padding: 0.3rem 1rem; margin-right: 0.5rem;" @click="verwijderTaak(taak.id)">Verwijderen</button>
-                <button style="background-color: gold; padding: 0.3rem 1rem;" @click="bewerkTaak(taak.id)">Bewerken</button>
-              </template>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+  <button 
+    style="background-color: gold; padding: 0.3rem 1rem; border: 1px solid black; font-weight: bold; min-width: 120px;" 
+    @click="verwijderTaak(taak.id)">
+    Verwijderen
+  </button>
+  <button 
+    style="background-color: gold; padding: 0.3rem 1rem; border: 1px solid black; font-weight: bold; min-width: 120px;" 
+    @click="bewerkTaak(taak.id)">
+    Bewerken
+  </button>
+</div>
+
+</template>
+
 
               <!-- Gebruiker mag alleen status wijzigen -->
               <template v-else>
@@ -80,19 +96,21 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from '@/axios'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
+const authStore = useAuthStore() // ← VOEG TOE
 const taken = ref([])
-const gebruiker = ref({})
 const statusFilter = ref('')
 const deadlineFilter = ref('')
+const gebruiker = computed(() => authStore.user)
 
 
 // Haal gebruiker en taken op
 onMounted(async () => {
   try {
-    const userRes = await axios.get('/api/user')
-    gebruiker.value = userRes.data
+    //const userRes = await axios.get('/api/user')
+    // gebruiker.value = userRes.data
 
     const takenRes = await axios.get('/api/taken')
     taken.value = takenRes.data
@@ -102,7 +120,7 @@ onMounted(async () => {
 })
 
 // Logout
-const logout = async () => {
+/*const logout = async () => {
   try {
     await axios.post('/api/logout')
     await axios.get('/sanctum/csrf-cookie')
@@ -111,7 +129,7 @@ const logout = async () => {
   } finally {
     router.push('/login')
   }
-}
+}*/
 
 // Verwijder een taak
 const verwijderTaak = async (id) => {

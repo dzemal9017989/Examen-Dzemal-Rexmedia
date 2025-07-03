@@ -16,4 +16,18 @@ class UserController extends Controller
 
         return User::select('id', 'name')->get(); // alleen ID en naam tonen
     }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Optioneel: voorkom dat admin zichzelf of andere admins verwijdert
+        if ($user->role === 'admin') {
+            return response()->json(['error' => 'Admins kunnen niet worden verwijderd'], 403);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'Gebruiker succesvol verwijderd']);
+    }
 }

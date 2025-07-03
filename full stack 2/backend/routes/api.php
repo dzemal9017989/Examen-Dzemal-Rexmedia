@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
   // Users routes
   Route::get('/api/users', [UserController::class, 'index']);
+  Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
   Route::get('/invitations/{token}', [InvitationController::class, 'show']);
   Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept']);
 });

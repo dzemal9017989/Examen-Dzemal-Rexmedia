@@ -1,0 +1,5 @@
+<template>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+      <router-view />
+    </div>
+  </template>

@@ -1,34 +1,37 @@
 <template>
   <div class="pagina">
-    <header class="header">
+    <!--<header class="header">
       <h1 class="logo">Suriname</h1>
       <nav class="navigatie">
         <button @click="logout">Uitloggen</button>
         <button @click="$router.push('/statistieken')">Statistiekenpagina</button>
         <button @click="$router.push('/taken')">Takenlijst</button>
       </nav>
-    </header>
+    </header>-->
 
     <main class="inhoud">
+      <div style="padding: 2rem;">
       <h2>Statistiekenpagina</h2>
       <p><strong>To do:</strong> {{ todo }}</p>
       <p><strong>Bezig:</strong> {{ bezig }}</p>
       <p><strong>Afgerond:</strong> {{ afgerond }}</p>
+    </div>
     </main>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import axios from '@/axios'
 
-const router = useRouter()
+// const router = useRouter()
 
 const todo = ref(0)
 const bezig = ref(0)
 const afgerond = ref(0)
 
+/*
 const logout = async () => {
   try {
     await axios.post('/api/logout')
@@ -38,6 +41,7 @@ const logout = async () => {
     console.error('Fout bij uitloggen:', err)
   }
 }
+*/
 
 onMounted(async () => {
   try {

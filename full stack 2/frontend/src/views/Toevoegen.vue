@@ -1,14 +1,14 @@
 <template>
   <div style="min-height: 100vh; background-color: white; margin: 0; padding: 0;">
     <!-- Header -->
-    <header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <!---<header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
       <h1 style="color: red; font-size: 2rem; margin: 0;">Suriname</h1>
       <nav style="display: flex; gap: 1rem;">
         <button @click="logout" style="color: red; background: none; border: none; font-weight: bold;">Uitloggen</button>
         <button @click="$router.push('/statistieken')" style="color: red; background: none; border: none; font-weight: bold;">Statistiekenpagina</button>
         <button @click="$router.push('/taken')" style="color: red; background: none; border: none; font-weight: bold;">Takenlijst</button>
       </nav>
-    </header>
+    </header>-->
 
     <!-- Formulier -->
     <main style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 2rem;">
@@ -88,10 +88,11 @@ onMounted(async () => {
   }
 })
 
+/*
 const logout = async () => {
   await axios.post('/logout')
   router.push('/login')
-}
+}*/
 
 const opslaan = async () => {
   error.value = ''

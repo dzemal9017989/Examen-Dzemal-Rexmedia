@@ -2,7 +2,7 @@
     <div style="background-color: white; min-height: 100vh; padding: 0; margin: 0;">
       
       <!-- HEADER -->
-      <header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <!---<header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
         <h1 style="color: red; font-size: 2rem; margin: 0;">Suriname</h1>
         <nav style="display: flex; gap: 1rem;">
           <button @click="logout" style="color: red; background: none; border: none; font-weight: bold;">Uitloggen</button>
@@ -10,7 +10,7 @@
           <button @click="$router.push('/taken')" style="color: red; background: none; border: none; font-weight: bold;">Takenlijst</button>
           <button style="color: red; background: none; border: none; font-weight: bold; text-decoration: underline;">Gebruikers</button>
         </nav>
-      </header>
+      </header>-->
   
       <!-- Toevoegen knop -->
       <div style="margin: 1rem; text-align: right;">
@@ -19,37 +19,44 @@
         </button>
       </div>
   
-      <!-- MAIN -->
       <main style="padding: 2rem;">
-        <h2>Gebruikersbeheer</h2>
-  
-        <!-- Uitnodigingsformulier -->
-        <div v-if="showForm" style="background-color: #f1c40f; padding: 2rem; margin-bottom: 2rem; width: 400px;">
-          <h3 style="margin-top: 0;">Nieuwe Gebruiker Uitnodigen</h3>
-          <form @submit.prevent="sendInvitation">
-            
-            <label style="font-weight: bold;">Naam</label>
-            <input v-model="form.name" type="text" placeholder="Vul hier de naam in" required
-                   style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-  
-            <label style="font-weight: bold;">Email</label>
-            <input v-model="form.email" type="email" placeholder="Vul hier het emailadres in" required
-                   style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-  
-            <label style="font-weight: bold;">Rol</label>
-            <select v-model="form.role" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-              <option value="user">Gebruiker</option>
-              <option value="admin">Admin</option>
-            </select>
-  
-            <div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">{{ error }}</div>
-            <div v-if="success" style="color: green; font-weight: bold; margin-bottom: 1rem;">{{ success }}</div>
-  
-            <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1.5rem; border: none; font-weight: bold;">
-              Uitnodiging Versturen
-            </button>
-          </form>
-        </div>
+
+<!-- TITEL IN HET MIDDEN -->
+<div style="text-align: center; margin-bottom: 1rem;">
+  <h2 style="margin: 0;">Gebruikersbeheer</h2>
+</div>
+
+<!-- FORMULIER GEHEEL CENTREREN -->
+<div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+  <div v-if="showForm" style="background-color: #f1c40f; padding: 2rem; width: 400px;">
+    <h3 style="margin-top: 0;">Nieuwe Gebruiker Uitnodigen</h3>
+    <form @submit.prevent="sendInvitation">
+      
+      <label style="font-weight: bold;">Naam</label>
+      <input v-model="form.name" type="text" placeholder="Vul hier de naam in" required
+             style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+
+      <label style="font-weight: bold;">Email</label>
+      <input v-model="form.email" type="email" placeholder="Vul hier het emailadres in" required
+             style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+
+      <label style="font-weight: bold;">Rol</label>
+      <select v-model="form.role" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+        <option value="user">Gebruiker</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">{{ error }}</div>
+      <div v-if="success" style="color: green; font-weight: bold; margin-bottom: 1rem;">{{ success }}</div>
+
+      <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1.5rem; border: none; font-weight: bold;">
+        Uitnodiging Versturen
+      </button>
+    </form>
+  </div>
+</div>
+
+
   
         <!-- Actieve Gebruikers Tabel -->
         <h3>Actieve Gebruikers</h3>
@@ -64,15 +71,24 @@
           </thead>
           <tbody>
             <tr v-for="user in users" :key="user.id" style="border-top: 1px solid black;">
-              <td style="padding: 0.5rem;">{{ user.name }}</td>
-              <td style="padding: 0.5rem;">{{ user.email }}</td>
-              <td style="padding: 0.5rem;">
-                <span :style="{ color: user.role === 'admin' ? 'red' : 'blue', fontWeight: 'bold' }">
-                  {{ user.role === 'admin' ? 'Admin' : 'Gebruiker' }}
-                </span>
-              </td>
-              <td style="padding: 0.5rem;">{{ formatDate(user.created_at) }}</td>
-            </tr>
+  <td style="padding: 0.5rem;">{{ user.name }}</td>
+  <td style="padding: 0.5rem;">{{ user.email }}</td>
+  <td style="padding: 0.5rem;">
+    <span :style="{ color: user.role === 'admin' ? 'red' : 'blue', fontWeight: 'bold' }">
+      {{ user.role === 'admin' ? 'Admin' : 'Gebruiker' }}
+    </span>
+  </td>
+  <td style="padding: 0.5rem;">{{ formatDate(user.created_at) }}</td>
+  <td style="padding: 0.5rem; text-align: right;">
+    <button 
+      @click="deleteUser(user.id)" 
+      style="background-color: red; color: white; padding: 0.3rem 1rem;"
+      :disabled="user.role === 'admin'">
+      Verwijderen
+    </button>
+  </td>
+</tr>
+
           </tbody>
         </table>
   
@@ -194,6 +210,7 @@
     return new Date(dateString).toLocaleDateString('nl-NL')
   }
   
+  /*
   const logout = async () => {
     try {
       await axios.post('/api/logout')
@@ -203,7 +220,21 @@
       router.push('/login')
     }
   }
+  */
   
   // Load data on mount
   onMounted(loadData)
+
+  const deleteUser = async (id) => {
+  if (!confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?')) return
+
+  try {
+    await axios.delete(`/api/admin/users/${id}`)
+    await loadData()
+  } catch (err) {
+    console.error('Fout bij verwijderen gebruiker:', err)
+    error.value = 'Fout bij verwijderen gebruiker'
+  }
+}
+
   </script>

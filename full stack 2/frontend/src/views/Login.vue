@@ -1,50 +1,38 @@
 <template>
-  <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="p-5 rounded" style="background-color: #e8be17; width: 400px;">
-      <h2 class="text-center mb-4">Inloggen</h2>
+  <div class="p-5 rounded" style="background-color: #e8be17; width: 400px;">
+    <h2 class="text-center mb-4">Inloggen</h2>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-          v-model="email"
-          type="email"
-          class="form-control"
-          id="email"
-          placeholder="Vul hier je emailadres in"
-          required
-        />
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">Wachtwoord</label>
-        <input
-          v-model="password"
-          type="password"
-          class="form-control"
-          id="password"
-          placeholder="Vul hier je wachtwoord in"
-          required
-        />
-      </div>
-
-      <div class="text-danger mb-3" v-if="error">{{ error }}</div>
-
-      <button @click="login" class="btn btn-danger w-100">Inloggen</button>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input v-model="email" type="email" class="form-control" placeholder="Vul hier je emailadres in" required />
     </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Wachtwoord</label>
+      <input v-model="password" type="password" class="form-control" placeholder="Vul hier je wachtwoord in" required />
+    </div>
+
+    <div class="text-danger mb-3" v-if="error">{{ error }}</div>
+
+    <button @click="handleLogin" class="btn btn-danger w-100" :disabled="authStore.loading">
+      {{ authStore.loading ? 'Bezig...' : 'Inloggen' }}
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import axios from '../axios' 
+import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
-const router = useRouter()
 
-const login = async () => {
+const handleLogin = async () => {
   error.value = ''
 
   if (!email.value || !password.value) {
@@ -52,25 +40,15 @@ const login = async () => {
     return
   }
 
-  try {
-    await axios.get('/sanctum/csrf-cookie')
-    
-    const res = await axios.post('/api/login', {
-      email: email.value,
-      password: password.value
-    })
-    console.log('✅ Ingelogd:', res.data)
+  const result = await authStore.login({
+    email: email.value,
+    password: password.value
+  })
 
-    // 👇 Test of sessie werkt
-    const userRes = await axios.get('/api/user')
-    console.log('👤 Ingelogde gebruiker:', userRes.data)
-
+  if (result.success) {
     router.push('/taken')
-  } catch (err) {
-    console.error('❌ Login error:', err.response?.data || err.message)
-    error.value = 'Inloggen mislukt. Controleer je gegevens.'
+  } else {
+    error.value = result.message
   }
 }
-
-
 </script>
