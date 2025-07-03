@@ -15,7 +15,7 @@ class InvitationController extends Controller
 {
     public function store(Request $request)
     {
-        Log::info('⏳ Start uitnodiging verwerken', $request->all());
+        Log::info('Start uitnodiging verwerken', $request->all());
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',

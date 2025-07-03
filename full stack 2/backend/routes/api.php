@@ -10,6 +10,8 @@ use App\Http\Controllers\InvitationController;
 
 // ✅ Login route (no auth needed)
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/invitations/{token}', [InvitationController::class, 'show']);
+Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept']);
 
 // ✅ Routes that need authentication (using 'auth' not 'auth:sanctum')
 Route::middleware('auth')->group(function () {
@@ -27,8 +29,6 @@ Route::middleware('auth')->group(function () {
   // Users routes
   Route::get('/api/users', [UserController::class, 'index']);
   Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
-  Route::get('/invitations/{token}', [InvitationController::class, 'show']);
-  Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept']);
 });
 
 // Gewijzigd:
@@ -42,4 +42,3 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
 
 Route::middleware('auth')->get('/users', [GebruikerController::class, 'index']);
-

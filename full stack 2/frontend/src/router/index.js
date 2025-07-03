@@ -83,7 +83,8 @@ router.beforeEach(async (to, from, next) => {
 
   // Als pagina alleen voor gasten maar gebruiker ingelogd → naar taken
   if (to.meta.requiresGuest && isAuthenticated) {
-    return next('/taken')
+    await authStore.logout()
+    return true
   }
 
   next()

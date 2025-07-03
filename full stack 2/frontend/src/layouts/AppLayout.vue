@@ -19,7 +19,7 @@
         </nav>
       </header>
   
-      <!-- Hier komen je pagina's -->
+      
       <router-view />
     </div>
     

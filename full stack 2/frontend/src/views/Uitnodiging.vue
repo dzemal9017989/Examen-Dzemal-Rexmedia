@@ -57,7 +57,6 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from '@/axios'
 
 const route = useRoute()
-const router = useRouter()
 
 const laden = ref(true)
 const uitnodiging = ref(null)
