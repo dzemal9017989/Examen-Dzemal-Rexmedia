@@ -49,7 +49,16 @@ const router = createRouter({
       path: '/uitnodiging/:token',
       name: 'Uitnodiging',
       component: Uitnodiging,
-      meta: { requiresGuest: true }
+      beforeEnter: async (to, from, next) => {
+        const authStore = useAuthStore()
+        
+        // Uitnodigingen zijn altijd voor nieuwe accounts
+        if (authStore.isAuthenticated) {
+          await authStore.logout()
+        }
+        
+    next()
+    }
     }
   ]
 })
@@ -83,8 +92,7 @@ router.beforeEach(async (to, from, next) => {
 
   // Als pagina alleen voor gasten maar gebruiker ingelogd → naar taken
   if (to.meta.requiresGuest && isAuthenticated) {
-    await authStore.logout()
-    return true
+    return next('/taken')
   }
 
   next()
