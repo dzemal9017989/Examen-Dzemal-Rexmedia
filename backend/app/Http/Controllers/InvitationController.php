@@ -19,7 +19,7 @@ class InvitationController extends Controller
         // This begins with a message in the log file
         Log::info('Start uitnodiging verwerken', $request->all());
 
-        // This validates things uch as name, email and role
+        // This validates things such as name, email and role
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|unique:invitations,email',

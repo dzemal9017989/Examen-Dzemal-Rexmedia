@@ -6,10 +6,10 @@
         
         <!-- Alleen admin mag titel bewerken -->
         <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Titel</label>
-        <input v-if="gebruiker.role === 'admin'" type="text" v-model="titel" placeholder="Titel" style="width: 100%; margin-bottom: 1rem;" />
+        <input v-if="gebruiker.role === 'admin'" type="text" v-model="title" placeholder="Titel" style="width: 100%; margin-bottom: 1rem;" />
 
         <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Beschrijving</label>
-        <input v-if="gebruiker.role === 'admin'" type="text" v-model="beschrijving" placeholder="Beschrijving" style="width: 100%; margin-bottom: 1rem;" />
+        <input v-if="gebruiker.role === 'admin'" type="text" v-model="description" placeholder="Beschrijving" style="width: 100%; margin-bottom: 1rem;" />
 
         <!-- Iedereen mag status wijzigen -->
         <label style="font-weight: bold;">Status</label>
@@ -53,15 +53,15 @@ const route = useRoute()
 const router = useRouter()
 
 // Form fields
-const titel = ref('')
-const beschrijving = ref('')
+const title = ref('')
+const description = ref('')
 const status_id = ref(1)
 const deadline = ref('')
-const gebruiker_id = ref(null)
-const gebruikers = ref([])
+const user_id = ref(null)
+const users = ref([])
 
 const error = ref('')
-const gebruiker = ref({})
+const user = ref({})
 
 onMounted(async () => {
   try {
@@ -71,16 +71,16 @@ onMounted(async () => {
 
     // Haal taakgegevens op
     const { data } = await axios.get(`/api/taken/${route.params.id}`)
-    titel.value = data.titel
-    beschrijving.value = data.beschrijving
+    title.value = data.title
+    description.value = data.description
     status_id.value = data.status_id
     deadline.value = data.deadline
-    gebruiker_id.value = data.gebruiker_id
+    user_id.value = data.user_id
 
     // Alleen admin: haal alle gebruikers op voor dropdown
-    if (gebruiker.value.role === 'admin') {
+    if (user.value.role === 'admin') {
       const res = await axios.get('/api/users') // of '/api/gebruiker-opties'
-      gebruikers.value = res.data
+      users.value = res.data
     }
 
   } catch (err) {
@@ -91,13 +91,13 @@ onMounted(async () => {
 const opslaan = async () => {
   error.value = ''
   try {
-    const payload = gebruiker.value.role === 'admin'
+    const payload = user.value.role === 'admin'
       ? {
-          titel: titel.value,
-          beschrijving: beschrijving.value,
+          title: title.value,
+          description: description.value,
           status_id: status_id.value,
           deadline: deadline.value,
-          gebruiker_id: gebruiker_id.value
+          user_id: user_id.value
         }
       : {
           status_id: status_id.value

@@ -55,15 +55,15 @@
         </thead>
         <tbody>
           <tr v-for="taak in gefilterdeTaken" :key="taak.id" style="border-top: 1px solid black;">
-            <td style="padding: 0.5rem; white-space: pre-line;">{{ taak.titel }}</td>
-            <td style="padding: 0.5rem; white-space: pre-line;">{{ taak.beschrijving }}</td>
-            <td style="padding: 0.5rem;">{{ taak.status.naam }}</td>
+            <td style="padding: 0.5rem; white-space: pre-line;">{{ taak.title }}</td>
+            <td style="padding: 0.5rem; white-space: pre-line;">{{ taak.description }}</td>
+            <td style="padding: 0.5rem;">{{ taak.status.name }}</td>
             <td style="padding: 0.5rem;">{{ taak.deadline }}</td>
-            <td v-if="gebruiker.role === 'admin'" style="padding: 0.5rem;">{{ taak.gebruiker?.name }}</td>
+            <td v-if="gebruiker.role === 'admin'" style="padding: 0.5rem;">{{ taak.user?.name }}</td>
 
             <td style="padding: 0.5rem; text-align: right;">
               <!-- Admin mag alles -->
-              <template v-if="gebruiker.role === 'admin'">
+              <template v-if="gebruiker && gebruiker.role === 'admin'">
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
   <button 
     style="background-color: gold; padding: 0.3rem 1rem; border: 1px solid black; font-weight: bold; min-width: 120px;" 
@@ -82,7 +82,7 @@
 
               <!-- Gebruiker mag alleen status wijzigen -->
               <template v-else>
-                <button v-if="taak.gebruiker_id === gebruiker.id" style="background-color: gold; padding: 0.3rem 1rem;" @click="bewerkTaak(taak.id)">Status wijzigen</button>
+                <button v-if="taak.user_id === gebruiker.id" style="background-color: gold; padding: 0.3rem 1rem;" @click="bewerkTaak(taak.id)">Status wijzigen</button>
               </template>
             </td>
           </tr>
@@ -155,7 +155,7 @@ const toevoegen = () => {
 
 const gefilterdeTaken = computed(() => {
   return taken.value.filter(taak => {
-    const statusMatch = statusFilter.value === '' || taak.status.naam.toLowerCase() === statusFilter.value.toLowerCase()
+    const statusMatch = statusFilter.value === '' || taak.status.name.toLowerCase() === statusFilter.value.toLowerCase()
 
     const vandaag = new Date().toISOString().split('T')[0]
     const taakDatum = taak.deadline

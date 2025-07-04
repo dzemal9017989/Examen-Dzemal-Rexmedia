@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
-class Taak extends Model
+class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titel', 'beschrijving', 'status_id', 'deadline', 'gebruiker_id'];
+    protected $fillable = ['title', 'description', 'status_id', 'deadline', 'user_id'];
 
-    public function gebruiker()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'gebruiker_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function status()

@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Taak;
-use App\Policies\TaakPolicy;
+use App\Models\Task;
+use App\Policies\TaskPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -15,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      */
 
      protected $policies = [
-    Taak::class => TaakPolicy::class,
+    Task::class => TaskPolicy::class,
 ];
     public function register(): void
     {

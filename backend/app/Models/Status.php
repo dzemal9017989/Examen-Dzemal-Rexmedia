@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    protected $table = 'statussen'; // 💡 belangrijk: tabelnaam in meervoud
-    protected $fillable = ['naam'];
+    protected $table = 'statuses'; // 💡 belangrijk: tabelnaam in meervoud
+    protected $fillable = ['name'];
 
     public function taken()
     {
-        return $this->hasMany(Taak::class);
+        return $this->hasMany(Task::class);
     }
 }
