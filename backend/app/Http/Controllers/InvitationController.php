@@ -13,28 +13,37 @@ use Illuminate\Support\Facades\Log;
 
 class InvitationController extends Controller
 {
+    // This function handles the creation and sending of user invitations
     public function store(Request $request)
     {
+        // This begins with a message in the log file
         Log::info('Start uitnodiging verwerken', $request->all());
 
+        // This validates things uch as name, email and role
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|unique:invitations,email',
             'role' => 'required|in:user,admin'
         ]);
 
+        // This try catch block looks if the validation has succeeded or failed
         try {
-            Log::info('✅ Validatie gelukt');
+            // Validation has succeeded
+            Log::info('Validatie gelukt');
 
+            // This makes a invitation in the database with validated data
             $invitation = Invitation::create($validated);
 
+            // This sends a message from the admin who want to sends an invitation message to the user
             Log::info('📧 Versturen mail naar ' . $invitation->email);
 
-            // Verstuur de uitnodigingsmail
+            // This sends the invitation email form the bsackend to the user
             Mail::to($invitation->email)->send(new UserInvitation($invitation));
 
+            // This sends an aproved message that the email is sent
             Log::info('📬 Mail verstuurd');
 
+            // This returns a JSON response message with the email address of the user that is invited
             return response()->json([
                 'message' => 'Uitnodiging verzonden naar ' . $invitation->email,
                 'invitation' => $invitation
