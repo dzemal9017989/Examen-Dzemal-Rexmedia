@@ -22,9 +22,9 @@ Route::middleware('auth')->group(function () {
   // Taken routes
   Route::get('/taken', [TaakController::class, 'index']);
   Route::post('/taken', [TaakController::class, 'store']);
-  Route::get('taken/{taak}', [TaakController::class, 'show']);
-  Route::put('/taken/{taak}', [TaakController::class, 'update']);
-  Route::delete('/taken/{taak}', [TaakController::class, 'destroy']);
+  Route::get('taken/{id}', [TaakController::class, 'show']);
+  Route::put('/taken/{id}', [TaakController::class, 'update']);
+  Route::delete('/taken/{id}', [TaakController::class, 'destroy']);
 
   // Users routes
   Route::get('/api/users', [UserController::class, 'index']);
@@ -39,6 +39,5 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
   Route::post('/admin/invitations', [InvitationController::class, 'store']);
   Route::delete('/admin/invitations/{id}', [InvitationController::class, 'destroy']);
 });
-
 
 Route::middleware('auth')->get('/users', [GebruikerController::class, 'index']);

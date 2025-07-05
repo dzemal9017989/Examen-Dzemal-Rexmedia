@@ -14,6 +14,8 @@ class AuthServiceProvider extends ServiceProvider
      * Register services.
      */
 
+
+    // This links a model to a associated policy
      protected $policies = [
     Task::class => TaskPolicy::class,
 ];
@@ -25,6 +27,8 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
+
+     // This method will be automatically called when the application starts
 public function boot(): void
 {
     $this->registerPolicies(); // <- dit zorgt dat de policy actief is

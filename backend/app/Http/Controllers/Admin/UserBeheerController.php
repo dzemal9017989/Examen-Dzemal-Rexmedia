@@ -12,11 +12,11 @@ class UserBeheerController extends Controller
     // This function retrieves users from the database
     public function index()
     {
-        // This returns a list from all the users
+        // This returns/shows a list from all the users
         return User::all();
     }
 
-    // The purpose of the function is add a new user to the database.
+    // The purpose of the function is to add a new user to the database.
     public function store(Request $request)
     {
         // This validates data such as name, email, password and role

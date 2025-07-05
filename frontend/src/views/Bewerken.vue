@@ -5,11 +5,11 @@
       <form @submit.prevent="opslaan" style="background-color: #f1c40f; padding: 2rem; width: 400px;">
         
         <!-- Alleen admin mag titel bewerken -->
-        <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Titel</label>
-        <input v-if="gebruiker.role === 'admin'" type="text" v-model="title" placeholder="Titel" style="width: 100%; margin-bottom: 1rem;" />
+        <label v-if="user.role === 'admin'" style="font-weight: bold;">Titel</label>
+        <input v-if="user.role === 'admin'" type="text" v-model="title" placeholder="Titel" style="width: 100%; margin-bottom: 1rem;" />
 
-        <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Beschrijving</label>
-        <input v-if="gebruiker.role === 'admin'" type="text" v-model="description" placeholder="Beschrijving" style="width: 100%; margin-bottom: 1rem;" />
+        <label v-if="user.role === 'admin'" style="font-weight: bold;">Beschrijving</label>
+        <input v-if="user.role === 'admin'" type="text" v-model="description" placeholder="Beschrijving" style="width: 100%; margin-bottom: 1rem;" />
 
         <!-- Iedereen mag status wijzigen -->
         <label style="font-weight: bold;">Status</label>
@@ -20,14 +20,14 @@
         </select>
 
         <!-- Alleen admin mag deadline aanpassen -->
-        <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Deadline</label>
-        <input v-if="gebruiker.role === 'admin'" type="date" v-model="deadline" style="width: 100%; margin-bottom: 1rem;" />
+        <label v-if="user.role === 'admin'" style="font-weight: bold;">Deadline</label>
+        <input v-if="user.role === 'admin'" type="date" v-model="deadline" style="width: 100%; margin-bottom: 1rem;" />
 
         <!-- Alleen admin mag taak toewijzen -->
-        <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
-        <select v-if="gebruiker.role === 'admin'" v-model="gebruiker_id" style="width: 100%; margin-bottom: 1rem;">
+        <label v-if="user.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
+        <select v-if="user.role === 'admin'" v-model="user_id" style="width: 100%; margin-bottom: 1rem;">
           <option disabled value="">-- Kies gebruiker --</option>
-          <option v-for="g in gebruikers" :key="g.id" :value="g.id">
+          <option v-for="g in users" :key="g.id" :value="g.id">
             {{ g.name }}
           </option>
         </select>
@@ -67,7 +67,7 @@ onMounted(async () => {
   try {
     // Haal ingelogde gebruiker op
     const userRes = await axios.get('/api/user')
-    gebruiker.value = userRes.data
+    user.value = userRes.data
 
     // Haal taakgegevens op
     const { data } = await axios.get(`/api/taken/${route.params.id}`)

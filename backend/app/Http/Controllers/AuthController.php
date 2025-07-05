@@ -8,49 +8,50 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-    // This function kakes it possible to login with a emailadress and password
-public function login(Request $request)
+    // This function allows a user to log in using an email address and password.
+    public function login(Request $request)
 {
     // Retrieves the email and password from the request
     $credentials = $request->only('email', 'password');
 
-    // The user logs in with the credentials
+    // The user attempts to log in with the credentials
     if (Auth::attempt($credentials)) {
-        // If it didn't go as expected the session will be renewed 
-        $request->session()->regenerate();
+            // If authentication is successful, the session will be regenerated for security
+            $request->session()->regenerate();
 
-        // This sends a JSON-response with a positive message and the user data
+        // This returns a JSON-response with a success message and the authenticated user
         return response()->json([
             'message' => 'Ingelogd!',
             'user' => Auth::user()
         ]);
     }
 
-    // This sends a error message and a 401 error if 
+    // This returns a error message and a 401 error if login fails
     return response()->json([
         'message' => 'Login mislukt!'
     ], 401);
 }
 
 
-    // This function makes it possible the the user logs out
+    // This function handles user logout
     public function logout(Request $request)
     {
         // This logs the user out with the web guard
         Auth::guard('web')->logout();
-        // This makes the session invalid an generates new token for security
+        // This makes the session invalid and generates a new token for security reasons
         $request->session()->invalidate();
+        // A new CSRF token will be generated for security reasons
         $request->session()->regenerateToken();
 
 
-        // This sends a message that user is logged out
+        // This returns a message that says that the user is logged out
         return response()->json(['message' => 'Uitgelogd']);
     }
 
     // This function returns the user data of the logged in user
     public function user(Request $request)
     {
-        // This return the user data of the user that is logged in
+        // This returns the authenticated user
         return $request->user();
     }
 }

@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
 {
+    // The create method creates a new table in the database called 'taaks'
     Schema::create('taaks', function (Blueprint $table) {
-        $table->id();
+        $table->id(); // Default primary key column
         $table->foreignId('gebruiker_id')->constrained('users')->onDelete('cascade');
         $table->string('titel');
-        $table->text('beschrijving')->nullable();
-        $table->foreignId('status_id')->constrained('statussen');
-        $table->date('deadline');
-        $table->timestamps();
+        $table->text('beschrijving')->nullable(); // 
+        $table->foreignId('status_id')->constrained('statussen'); // column for the status of the task, referencing the 'statussen' table
+        $table->date('deadline'); // date column for the deadline of the task
+        $table->timestamps(); // Deafult timestamps for created_at and updated_at
     });
 }
 
