@@ -15,6 +15,7 @@ return [
     |
     */
 
+    // This helps Laravel Sanctum to know from which domains the frontend requests are coming.
   'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost:5173')),
 
 

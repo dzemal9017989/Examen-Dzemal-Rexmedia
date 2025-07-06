@@ -97,6 +97,7 @@ return [
             'retry_after' => 60,
         ],
 
+        // This sets the deafult for sending emails
         'mailgun' => [
             'transport' => 'mailgun',
             // 'client' => [

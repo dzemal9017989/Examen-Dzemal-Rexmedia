@@ -15,10 +15,12 @@ return [
     |
     */
 
+    // Paths that should be accessible via CORS
     'paths' => ['api/*', 'login', 'logout', 'user', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
+    // Only requests that derives from this localhost will be called
     'allowed_origins' => ['http://localhost:5173'],
 
     'allowed_origins_patterns' => [],
@@ -29,6 +31,7 @@ return [
 
     'max_age' => 0,
 
+    // This allows cookies, sessions and tokens to be sent with the request
     'supports_credentials' => true,
 
 ];

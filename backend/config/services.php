@@ -35,6 +35,7 @@ return [
         ],
     ],
 
+    // These are the default settings to use Mailgun for sending emails
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

@@ -13,13 +13,13 @@ return new class extends Migration
 {
     // The create method creates a new table in the database called 'taaks'
     Schema::create('taaks', function (Blueprint $table) {
-        $table->id(); // Default primary key column
-        $table->foreignId('gebruiker_id')->constrained('users')->onDelete('cascade');
-        $table->string('titel');
-        $table->text('beschrijving')->nullable(); // 
+        $table->id(); // This makes a id column with a primary key
+        $table->foreignId('gebruiker_id')->constrained('users')->onDelete('cascade'); // This points the id of the user who created the task, referencing the 'users' table
+        $table->string('titel'); // This contains a string column for the title of the task
+        $table->text('beschrijving')->nullable(); // This contains a text column for the description of the task, which can be empty (nullable)
         $table->foreignId('status_id')->constrained('statussen'); // column for the status of the task, referencing the 'statussen' table
         $table->date('deadline'); // date column for the deadline of the task
-        $table->timestamps(); // Deafult timestamps for created_at and updated_at
+        $table->timestamps(); // Default timestamps for created_at and updated_at
     });
 }
 

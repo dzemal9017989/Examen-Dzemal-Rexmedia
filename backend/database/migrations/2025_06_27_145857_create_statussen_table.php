@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('statussen', function (Blueprint $table) {
-            $table->id();
-            $table->string('naam');
-            $table->timestamps();
+            $table->id(); // This comtains an id
+            $table->string('naam'); // The contains a string with column name called 'naam'
+            $table->timestamps(); // This creates the default timestamps for created_at and updated_at
         });
     }
 
