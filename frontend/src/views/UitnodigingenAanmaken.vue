@@ -1,18 +1,7 @@
 <template>
     <div style="background-color: white; min-height: 100vh; padding: 0; margin: 0;">
-      
-      <!-- HEADER -->
-      <!---<header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <h1 style="color: red; font-size: 2rem; margin: 0;">Suriname</h1>
-        <nav style="display: flex; gap: 1rem;">
-          <button @click="logout" style="color: red; background: none; border: none; font-weight: bold;">Uitloggen</button>
-          <button @click="$router.push('/statistieken')" style="color: red; background: none; border: none; font-weight: bold;">Statistiekenpagina</button>
-          <button @click="$router.push('/taken')" style="color: red; background: none; border: none; font-weight: bold;">Takenlijst</button>
-          <button style="color: red; background: none; border: none; font-weight: bold; text-decoration: underline;">Gebruikers</button>
-        </nav>
-      </header>-->
   
-      <!-- Toevoegen knop -->
+      <!-- This is a button to make or to cancel to make a invitation  -->
       <div style="margin: 1rem; text-align: right;">
         <button style="background-color: gold; padding: 0.5rem 1rem; font-weight: bold;" @click="showForm = !showForm">
           {{ showForm ? 'Annuleren' : 'Gebruiker Uitnodigen' }}
@@ -21,12 +10,11 @@
   
       <main style="padding: 2rem;">
 
-<!-- TITEL IN HET MIDDEN -->
 <div style="text-align: center; margin-bottom: 1rem;">
   <h2 style="margin: 0;">Gebruikersbeheer</h2>
 </div>
 
-<!-- FORMULIER GEHEEL CENTREREN -->
+<!----- Form -->
 <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
   <div v-if="showForm" style="background-color: #f1c40f; padding: 2rem; width: 400px;">
     <h3 style="margin-top: 0;">Nieuwe Gebruiker Uitnodigen</h3>
@@ -58,7 +46,7 @@
 
 
   
-        <!-- Actieve Gebruikers Tabel -->
+        <!-- A table that shows active users -->
         <h3>Actieve Gebruikers</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 3rem;">
           <thead>
@@ -92,7 +80,7 @@
           </tbody>
         </table>
   
-        <!-- Openstaande Uitnodigingen Tabel -->
+        <!-- A table that shows invitations that are open to acceot for the admin  -->
         <h3>Openstaande Uitnodigingen</h3>
         <table style="width: 100%; border-collapse: collapse;">
           <thead>
@@ -132,27 +120,29 @@
   </template>
   
   <script setup>
+  // These imports are for setting the foundations for the other things within the script tags
   import { ref, onMounted } from 'vue'
   import axios from '@/axios'
   import { useRouter } from 'vue-router'
   
   const router = useRouter()
   
-  // Data
+  // Data that is useful for the getting the invitations 
   const users = ref([])
   const invitations = ref([])
   const showForm = ref(false)
-  
+  // Data that is used for the form
   const form = ref({
     name: '',
     email: '',
     role: 'user'
   })
   
+  // Consts that help to handle errors for example
   const error = ref('')
   const success = ref('')
   
-  // Methods
+  // Functions that help to get invitations and users at the same time
   const loadData = async () => {
     try {
       const [usersRes, invitationsRes] = await Promise.all([
@@ -167,6 +157,7 @@
     }
   }
   
+  // This function sends invitations to new users
   const sendInvitation = async () => {
     error.value = ''
     success.value = ''
@@ -194,6 +185,7 @@
     }
   }
   
+  // This function cancels invitations
   const cancelInvitation = async (id) => {
     if (!confirm('Weet je zeker dat je deze uitnodiging wilt intrekken?')) return
     
@@ -206,25 +198,16 @@
     }
   }
   
+  // This function returns a readable date
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('nl-NL')
   }
   
-  /*
-  const logout = async () => {
-    try {
-      await axios.post('/api/logout')
-    } catch (err) {
-      console.warn('Fout bij uitloggen:', err)
-    } finally {
-      router.push('/login')
-    }
-  }
-  */
-  
+
   // Load data on mount
   onMounted(loadData)
 
+  // This function deletes a user
   const deleteUser = async (id) => {
   if (!confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?')) return
 

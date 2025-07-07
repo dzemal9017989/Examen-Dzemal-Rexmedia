@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\GebruikerController;
 use App\Http\Controllers\InvitationController;
 
-// ✅ Login route (no auth needed)
+// These routes are public and do not require authentication
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/invitations/{token}', [InvitationController::class, 'show']);
 Route::post('/invitations/{token}/accept', [InvitationController::class, 'accept']);
@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/user', [AuthController::class, 'user']);
   Route::post('/logout', [AuthController::class, 'logout']);
 
-  // Taken routes
+  // Tasks routes
   Route::get('/taken', [TaakController::class, 'index']);
   Route::post('/taken', [TaakController::class, 'store']);
   Route::get('taken/{id}', [TaakController::class, 'show']);
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
   Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
 });
 
-// Gewijzigd:
+// This middleware checks if the user is authenticated and has the 'admin' role
 Route::middleware(['auth', 'is_admin'])->group(function () {
   Route::get('/admin/users', [UserBeheerController::class, 'index']);
   Route::post('/admin/users', [UserBeheerController::class, 'store']);
@@ -40,4 +40,5 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
   Route::delete('/admin/invitations/{id}', [InvitationController::class, 'destroy']);
 });
 
+// This route shows all users, but only for authenticated users
 Route::middleware('auth')->get('/users', [GebruikerController::class, 'index']);

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // This methods says that we are going to change the existing tasks table
         Schema::table('tasks', function (Blueprint $table) {
-            // Zorg dat status_id het juiste type heeft
+            // This defines that the status_id column will have the correct data type
             $table->unsignedBigInteger('status_id')->change();
 
-            // Voeg foreign key toe
+            // This adds a foreign key constraint to the status_id column that points to the id column in the statuses table
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
         });
     }
@@ -23,6 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
+            // This deletes the foreign key constraint from the status_id column
             $table->dropForeign(['status_id']);
         });
     }

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Eerst de tabel hernoemen
+        // This changes the name of the table from Dutch to English
         Schema::rename('statussen', 'statuses');
 
-        // Daarna kolom hernoemen
+        // This method renames the columns in the statuses table to be more in English
         Schema::table('statuses', function (Blueprint $table) {
             $table->renameColumn('naam', 'name');
         });
@@ -23,6 +23,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+
+     
     public function down(): void
     {
         Schema::table('statussen', function (Blueprint $table) {

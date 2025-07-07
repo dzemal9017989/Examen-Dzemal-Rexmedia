@@ -1,4 +1,5 @@
 <template>
+  <!---- This is the form that the new user will get if he or she makes a new password to log in as a user ----->
   <div style="min-height: 100vh; background-color: white; display: flex; justify-content: center; align-items: center;">
     
     <!-- Loading -->
@@ -6,7 +7,7 @@
       <h2>Laden...</h2>
     </div>
 
-    <!-- Ongeldige uitnodiging -->
+    <!-- This only shows if the invitation is invalid -->
     <div v-else-if="!uitnodiging" style="background-color: #e8be17; padding: 2rem; width: 400px; text-align: center;">
       <h2 style="color: red;">Ongeldige uitnodiging</h2>
       <p>Deze uitnodiging is verlopen of al gebruikt.</p>
@@ -15,7 +16,7 @@
       </button>
     </div>
 
-    <!-- Account succesvol aangemaakt -->
+    <!-- This message appears if making a new passowrd as a user went succesfully -->
     <div v-else-if="klaar" style="background-color: #e8be17; padding: 2rem; width: 400px; text-align: center;">
       <h2 style="color: green;">Account aangemaakt!</h2>
       <p>Je kunt nu inloggen met je email en wachtwoord.</p>
@@ -24,7 +25,7 @@
       </button>
     </div>
 
-    <!-- Wachtwoord instellen -->
+    <!-- Making a new password as a user -->
     <div v-else style="background-color: #e8be17; padding: 2rem; width: 400px;">
       <h2>Account activeren</h2>
       <p><strong>Welkom {{ uitnodiging.name }}!</strong></p>
@@ -52,20 +53,24 @@
 </template>
 
 <script setup>
+// These imports are for setting the foundations for the other things within the script tags
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from '@/axios'
 
+// These const variables are for the functiong of the page
 const route = useRoute()
 
 const laden = ref(true)
 const uitnodiging = ref(null)
 const klaar = ref(false)
 
+// These const variables are for the form
 const wachtwoord = ref('')
 const bevestiging = ref('')
 const fout = ref('')
 
+// This function gets the invitation based on the token in the URL
 const ladenUitnodiging = async () => {
   try {
     const token = route.params.token
@@ -78,6 +83,7 @@ const ladenUitnodiging = async () => {
   laden.value = false
 }
 
+// This function validates the user when he or she clicks on 'Account activeren'
 const activeren = async () => {
   fout.value = ''
   
@@ -114,6 +120,7 @@ const activeren = async () => {
   }
 }
 
+// This function gets the invitation when the page is loaded
 onMounted(() => {
   ladenUitnodiging()
 })

@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
      */
 public function run(): void
 {
-    // Testgebruiker
+    // This makes a test user and checks if the user already exists
+    // If the user does not exist, it creates a new user with the specified details
     if (!User::where('email', 'test@example.com')->exists()) {
         User::create([
             'name' => 'Test User',
@@ -26,7 +27,7 @@ public function run(): void
         ]);
     }
 
-    // Admingebruiker
+    // This controlls if the admin user already exists
     if (!User::where('email', 'admin@example.com')->exists()) {
         User::create([
             'name' => 'Admin',
@@ -38,7 +39,7 @@ public function run(): void
         ]);
     }
 
-    // ✅ Roep hier je StatusSeeder aan
+    // This executes the StatusSeeder to populate the statuses table
     $this->call(StatusSeeder::class);
 }
 

@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // This changes the name of the table from Dutch to English
         Schema::rename('taaks', 'tasks');
+        // This renames the columns in the tasks table to be more in English
         Schema::table('tasks', function (Blueprint $table) {
             $table->renameColumn('gebruiker_id', 'user_id');
             $table->renameColumn('titel', 'title');

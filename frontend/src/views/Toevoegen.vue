@@ -1,16 +1,8 @@
 <template>
   <div style="min-height: 100vh; background-color: white; margin: 0; padding: 0;">
-    <!-- Header -->
-    <!---<header style="background-color: lime; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-      <h1 style="color: red; font-size: 2rem; margin: 0;">Suriname</h1>
-      <nav style="display: flex; gap: 1rem;">
-        <button @click="logout" style="color: red; background: none; border: none; font-weight: bold;">Uitloggen</button>
-        <button @click="$router.push('/statistieken')" style="color: red; background: none; border: none; font-weight: bold;">Statistiekenpagina</button>
-        <button @click="$router.push('/taken')" style="color: red; background: none; border: none; font-weight: bold;">Takenlijst</button>
-      </nav>
-    </header>-->
+    
 
-    <!-- Formulier -->
+    <!-- Formu -->
     <main style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 2rem;">
       <h2>Taak aanmaken of bewerken</h2>
       <form @submit.prevent="opslaan" style="background-color: #f1c40f; padding: 2rem; width: 400px;">
@@ -41,7 +33,7 @@
         </select>
 
 
-        <!-- Boven de opslaan-knop -->
+        <!-- It only shows this if an error occurs -->
 <div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">
   {{ error }}
 </div>
@@ -59,10 +51,12 @@
 </template>
 
 <script setup>
+// These imports are for setting the foundations for the other things within the script tags
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/axios'
 
+// These const variables are for defining things that derive from the HTML form
 const router = useRouter()
 
 const title = ref('')
@@ -74,6 +68,7 @@ const gebruiker = ref({})
 const gebruikers = ref([])
 const user_id = ref('')
 
+// This function gets the logged in user and if the user is an admin he will get the users by the dropdown menu 
 onMounted(async () => {
   try {
     const userRes = await axios.get('/api/user')
@@ -88,6 +83,7 @@ onMounted(async () => {
   }
 })
 
+// This const function sends the form to the Laravel API
 const opslaan = async () => {
   error.value = ''
 

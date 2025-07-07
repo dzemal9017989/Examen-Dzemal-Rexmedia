@@ -42,7 +42,7 @@ class TaakController extends Controller
             'user_id' => 'nullable|exists:users,id',
         ]);
 
-        // Als admin een taak aanmaakt voor een andere gebruiker
+        // If admin makes a task for a new user
         if ($request->user()->isAdmin() && isset($validated['user_id'])) {
             $task = Task::create($validated);
         } else {
@@ -60,6 +60,7 @@ class TaakController extends Controller
     {
         //  This checks if the user is allowed to delete the task
         $task = Task::findOrFail($id);
+        // This checks who is allowed to delete a task
         $this->authorize('delete', $task);
         // This deletes the task immediately from the database
         $deleted = Task::destroy($id);
@@ -74,6 +75,7 @@ class TaakController extends Controller
     // This function shows a specific task 
     public function show(int $id)
     {
+        // This looks for a task with an ID 
         $task = Task::with(['status', 'user'])->findOrFail($id);
         // This checks if the user is allowed to view the task
         $this->authorize('view', $task);

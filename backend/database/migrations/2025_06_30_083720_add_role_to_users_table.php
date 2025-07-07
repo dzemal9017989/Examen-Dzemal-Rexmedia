@@ -11,8 +11,12 @@ return new class extends Migration
      */
 public function up(): void
 {
+    // This makes a change in teh existing table and adds a new column called 'role'
     Schema::table('users', function (Blueprint $table) {
-        $table->string('role')->default('user')->after('password');
+            // This makes a standard value of the column called user, which is the default role for users
+            // This adds the column directly after the password column in the users table
+            $table->string('role')->default('user')->after('password'); 
+
     });
 }
 
@@ -22,6 +26,7 @@ public function up(): void
      */
 public function down(): void
 {
+    // This deletes the role column from the users table
     Schema::table('users', function (Blueprint $table) {
         $table->dropColumn('role');
     });

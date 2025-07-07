@@ -1,11 +1,12 @@
+// Here are the imports for the router and the auth store
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-// Layouts
+// Here are the imports for the layouts
 import AppLayout from '@/layouts/AppLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 
-// Views
+// Here the imports for the components of the views directory
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/Login.vue'
 import TakenView from '@/views/TakenView.vue'
@@ -18,7 +19,7 @@ import Uitnodiging from '@/views/Uitnodiging.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // Routes voor ingelogde gebruikers (met navigatie)
+    // Routes that require authentication and admin rights
     {
       path: '/',
       component: AppLayout,
@@ -33,7 +34,7 @@ const router = createRouter({
       ]
     },
 
-    // Login pagina (zonder navigatie)
+    // Login page that is ony accessible for guests who are not authenticated
     {
       path: '/login',
       name: 'login',
@@ -44,15 +45,14 @@ const router = createRouter({
       ]
     },
 
-    // Uitnodiging pagina (zonder navigatie)
+    // This route is for new users who get an invitation link by email
     {
       path: '/uitnodiging/:token',
       name: 'Uitnodiging',
       component: Uitnodiging,
       beforeEnter: async (to, from, next) => {
         const authStore = useAuthStore()
-        
-        // Uitnodigingen zijn altijd voor nieuwe accounts
+        // Check if the user is authenticated
         if (authStore.isAuthenticated) {
           await authStore.logout()
         }
@@ -63,38 +63,39 @@ const router = createRouter({
   ]
 })
 
-// Guards - dit zorgt voor beveiliging
+// Router guards are used to protect routes based on authentication and authorization
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   
-  // Check of gebruiker ingelogd is
+  // This checks if the user is logged in
   if (authStore.user === null && !authStore.loading) {
     await authStore.checkAuth()
   }
 
-  // Wacht tot check klaar is
+  // This waits till the check is done before you continue with the navigation
   while (authStore.loading) {
     await new Promise(resolve => setTimeout(resolve, 50))
   }
-
+  // This saves if the user is authenticated and if the user is an admin
   const isAuthenticated = authStore.isAuthenticated
   const isAdmin = authStore.isAdmin
 
-  // Als pagina login vereist maar gebruiker niet ingelogd → naar login
+  // This checks if the route requires authentication and if the user is not authenticated, it redirects to the login page
   if (to.meta.requiresAuth && !isAuthenticated) {
     return next('/login')
   }
 
-  // Als pagina admin vereist maar gebruiker geen admin → naar taken
+  // This checks if the route requires admin rights and if the user is not an admin, it redirects to the tasks page
   if (to.meta.requiresAdmin && !isAdmin) {
     return next('/taken')
   }
 
-  // Als pagina alleen voor gasten maar gebruiker ingelogd → naar taken
+  // This checks if the route is only for guests and if the user is logged in, it redirects to the tasks page
   if (to.meta.requiresGuest && isAuthenticated) {
     return next('/taken')
   }
 
+  // If all checks pass, it allows the navigation to continue
   next()
 })
 
