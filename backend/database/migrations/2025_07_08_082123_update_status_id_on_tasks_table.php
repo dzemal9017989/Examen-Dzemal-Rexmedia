@@ -15,8 +15,7 @@ return new class extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             // This makes the 'status_id' optional (nullable) and it changes the column 
             $table->unsignedBigInteger('status_id')->nullable()->change();
-            // This adds a foreign key t 'status_id' that points to the 'id' of the statuses table 
-            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
+           
         });
     }
 
