@@ -22,7 +22,7 @@
         </select>
 
         <label style="font-weight: bold;">Deadline</label>
-        <input type="date" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+        <input type="date" :min="today" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
 
         <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
         <select v-if="gebruiker.role === 'admin'" v-model="user_id" style="width: 100%; margin-bottom: 1rem;">
@@ -55,6 +55,9 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/axios'
+
+const today = new Date().toISOString().split('T')[0]
+
 
 // These const variables are for defining things that derive from the HTML form
 const router = useRouter()

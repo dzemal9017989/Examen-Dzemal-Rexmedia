@@ -21,7 +21,7 @@
 
         <!-- Alleen admin mag deadline aanpassen -->
         <label v-if="user.role === 'admin'" style="font-weight: bold;">Deadline</label>
-        <input v-if="user.role === 'admin'" type="date" v-model="deadline" style="width: 100%; margin-bottom: 1rem;" />
+        <input type="date" :min="today" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
 
         <!-- Alleen admin mag taak toewijzen -->
         <label v-if="user.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
@@ -49,6 +49,10 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from '@/axios'
 
+const today = new Date().toISOString().split('T')[0]
+
+
+
 const route = useRoute()
 const router = useRouter()
 
@@ -62,6 +66,8 @@ const users = ref([])
 
 const error = ref('')
 const user = ref({})
+
+
 
 onMounted(async () => {
   try {

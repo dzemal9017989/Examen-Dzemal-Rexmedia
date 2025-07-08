@@ -16,6 +16,7 @@ import StatistiekenView from '@/views/StatistiekenView.vue'
 import UitnodigingenAanmaken from '@/views/UitnodigingenAanmaken.vue'
 import Uitnodiging from '@/views/Uitnodiging.vue'
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
