@@ -52,7 +52,7 @@
             <td v-if="gebruiker.role === 'admin'" style="padding: 0.5rem;">{{ taak.user?.name }}</td>
 
             <td style="padding: 0.5rem; text-align: right;">
-              <!-- Admin mag alles -->
+              <!-- Admin can do everything--->
               <template v-if="gebruiker && gebruiker.role === 'admin'">
                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
   <button 
@@ -78,6 +78,12 @@
           </tr>
         </tbody>
       </table>
+      <hr style="margin: 0.5rem 0; border: 1px solid black;" />
+      <div v-if="authStore.isAdmin" style="margin-bottom: 1rem; text-align: right;">
+      <button style="background-color: gold; padding: 0.5rem 2.3rem; font-weight: bold;" @click="toevoegen">
+        Toevoegen
+      </button>
+    </div>
     </main>
   </div>
 </template>

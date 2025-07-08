@@ -10,10 +10,10 @@ class StatusSeeder extends Seeder
     public function run(): void
     {
         // This adds the 3 columns to the statuses table
-        DB::table('statussen')->insert([
-            ['id' => 1, 'naam' => 'To do'],
-            ['id' => 2, 'naam' => 'In behandeling'],
-            ['id' => 3, 'naam' => 'Voltooid'],
+        DB::table('statuses')->insert([
+            ['id' => 1, 'name' => 'To do'],
+            ['id' => 2, 'name' => 'In behandeling'],
+            ['id' => 3, 'name' => 'Voltooid'],
         ]);
     }
 }
