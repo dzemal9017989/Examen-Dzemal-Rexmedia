@@ -3,7 +3,7 @@
   
       <!-- This is a button to make or to cancel to make a invitation  -->
       <div style="margin: 1rem; text-align: right;">
-        <button style="background-color: gold; padding: 0.5rem 1rem; font-weight: bold;" @click="showForm = !showForm">
+        <button class="btn btn-warning fw-bold" @click="showForm = !showForm">
           {{ showForm ? 'Annuleren' : 'Gebruiker Uitnodigen' }}
         </button>
       </div>
@@ -37,7 +37,8 @@
       <div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">{{ error }}</div>
       <div v-if="success" style="color: green; font-weight: bold; margin-bottom: 1rem;">{{ success }}</div>
 
-      <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1.5rem; border: none; font-weight: bold;">
+      <button class="btn btn-danger btn-sm">
+
         Uitnodiging Versturen
       </button>
     </form>
@@ -68,13 +69,14 @@
   </td>
   <td style="padding: 0.5rem;">{{ formatDate(user.created_at) }}</td>
   <td style="padding: 0.5rem; text-align: right;">
-    <button 
-      @click="deleteUser(user.id)" 
-      style="background-color: red; color: white; padding: 0.3rem 1rem;"
-      :disabled="user.role === 'admin'">
-      Verwijderen
-    </button>
-  </td>
+  <button 
+    @click="deleteUser(user.id)" 
+    class="btn btn-danger btn-sm"
+    :disabled="user.role === 'admin'">
+    Verwijderen
+  </button>
+</td>
+
 </tr>
 
           </tbody>
@@ -102,12 +104,12 @@
                 </span>
               </td>
               <td style="padding: 0.5rem;">{{ formatDate(invitation.expires_at) }}</td>
-              <td style="padding: 0.5rem; text-align: right;">
-                <button @click="cancelInvitation(invitation.id)" 
-                        style="background-color: gold; padding: 0.3rem 1rem;">
-                  Intrekken
-                </button>
-              </td>
+              <td class="text-end">
+  <button @click="cancelInvitation(invitation.id)" class="btn btn-warning btn-sm">
+    Intrekken
+  </button>
+</td>
+
             </tr>
           </tbody>
         </table>

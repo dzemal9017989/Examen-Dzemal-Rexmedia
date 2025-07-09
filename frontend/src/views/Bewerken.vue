@@ -19,6 +19,8 @@
           <option :value="3">Voltooid</option>
         </select>
 
+        <label style="font-weight: bold;">Deadline</label>
+        <input type="date" :min="today" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
    
 
         <!-- Alleen admin mag taak toewijzen -->
