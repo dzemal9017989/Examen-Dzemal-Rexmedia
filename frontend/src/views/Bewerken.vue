@@ -19,9 +19,7 @@
           <option :value="3">Voltooid</option>
         </select>
 
-        <!-- Alleen admin mag deadline aanpassen -->
-        <label v-if="user.role === 'admin'" style="font-weight: bold;">Deadline</label>
-        <input type="date" :min="today" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+   
 
         <!-- Alleen admin mag taak toewijzen -->
         <label v-if="user.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
