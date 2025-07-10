@@ -1,125 +1,121 @@
 <template>
-    <div style="background-color: white; min-height: 100vh; padding: 0; margin: 0;">
-  
-      <!-- This is a button to make or to cancel to make a invitation  -->
-      <div style="margin: 1rem; text-align: right;">
-        <button class="btn btn-warning fw-bold" @click="showForm = !showForm">
-          {{ showForm ? 'Annuleren' : 'Gebruiker Uitnodigen' }}
-        </button>
-      </div>
-  
-      <main style="padding: 2rem;">
-
-<div style="text-align: center; margin-bottom: 1rem;">
-  <h2 style="margin: 0;">Gebruikersbeheer</h2>
-</div>
-
-<!----- Form -->
-<div style="display: flex; justify-content: center; margin-bottom: 2rem;">
-  <div v-if="showForm" style="background-color: #f1c40f; padding: 2rem; width: 400px;">
-    <h3 style="margin-top: 0;">Nieuwe Gebruiker Uitnodigen</h3>
-    <form @submit.prevent="sendInvitation">
-      
-      <label style="font-weight: bold;">Naam</label>
-      <input v-model="form.name" type="text" placeholder="Vul hier de naam in" required
-             style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-
-      <label style="font-weight: bold;">Email</label>
-      <input v-model="form.email" type="email" placeholder="Vul hier het emailadres in" required
-             style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-
-      <label style="font-weight: bold;">Rol</label>
-      <select v-model="form.role" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-        <option value="user">Gebruiker</option>
-        <option value="admin">Admin</option>
-      </select>
-
-      <div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">{{ error }}</div>
-      <div v-if="success" style="color: green; font-weight: bold; margin-bottom: 1rem;">{{ success }}</div>
-
-      <button class="btn btn-danger btn-sm">
-
-        Uitnodiging Versturen
+  <div class="container-fluid bg-white min-vh-100 py-4">
+    <!-- Bovenste knop -->
+    <div class="d-flex justify-content-end px-4 mb-3">
+      <button class="btn btn-warning fw-bold" @click="showForm = !showForm">
+        {{ showForm ? 'Annuleren' : 'Gebruiker Uitnodigen' }}
       </button>
-    </form>
-  </div>
-</div>
+    </div>
 
+    <main class="container">
+      <!-- Titel -->
+      <h2 class="text-center mb-4">Gebruikersbeheer</h2>
 
-  
-        <!-- A table that shows active users -->
-        <h3>Actieve Gebruikers</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 3rem;">
-          <thead>
+      <!-- Formulier -->
+      <div class="row justify-content-center mb-5">
+        <div v-if="showForm" class="col-md-6 col-lg-5">
+          <div class="card bg-warning p-4">
+            <h4 class="mb-3">Nieuwe Gebruiker Uitnodigen</h4>
+            <form @submit.prevent="sendInvitation">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Naam</label>
+                <input v-model="form.name" type="text" class="form-control" placeholder="Vul hier de naam in" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <input v-model="form.email" type="email" class="form-control" placeholder="Vul hier het emailadres in" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Rol</label>
+                <select v-model="form.role" class="form-select" required>
+                  <option value="user">Gebruiker</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div v-if="error" class="text-danger fw-bold mb-2">{{ error }}</div>
+              <div v-if="success" class="text-success fw-bold mb-2">{{ success }}</div>
+              <button type="submit" class="btn btn-danger btn-sm">Uitnodiging Versturen</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actieve gebruikers -->
+      <h4>Actieve Gebruikers</h4>
+      <div class="table-responsive mb-5">
+        <table class="table table-bordered align-middle">
+          <thead class="table-light">
             <tr>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Naam</th>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Email</th>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Rol</th>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Sinds</th>
+              <th>Naam</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Sinds</th>
+              <th class="text-end">Acties</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.id" style="border-top: 1px solid black;">
-  <td style="padding: 0.5rem;">{{ user.name }}</td>
-  <td style="padding: 0.5rem;">{{ user.email }}</td>
-  <td style="padding: 0.5rem;">
-    <span :style="{ color: user.role === 'admin' ? 'red' : 'blue', fontWeight: 'bold' }">
-      {{ user.role === 'admin' ? 'Admin' : 'Gebruiker' }}
-    </span>
-  </td>
-  <td style="padding: 0.5rem;">{{ formatDate(user.created_at) }}</td>
-  <td style="padding: 0.5rem; text-align: right;">
-  <button 
-    @click="deleteUser(user.id)" 
-    class="btn btn-danger btn-sm"
-    :disabled="user.role === 'admin'">
-    Verwijderen
-  </button>
-</td>
-
-</tr>
-
+            <tr v-for="user in users" :key="user.id">
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span :class="user.role === 'admin' ? 'text-danger fw-bold' : 'text-primary fw-bold'">
+                  {{ user.role === 'admin' ? 'Admin' : 'Gebruiker' }}
+                </span>
+              </td>
+              <td>{{ formatDate(user.created_at) }}</td>
+              <td class="text-end">
+                <button
+                  @click="deleteUser(user.id)"
+                  class="btn btn-danger btn-sm"
+                  :disabled="user.role === 'admin'"
+                >
+                  Verwijderen
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
-  
-        <!-- A table that shows invitations that are open to acceot for the admin  -->
-        <h3>Openstaande Uitnodigingen</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
+      </div>
+
+      <!-- Openstaande uitnodigingen -->
+      <h4>Openstaande Uitnodigingen</h4>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-light">
             <tr>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Naam</th>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Email</th>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Rol</th>
-              <th style="text-align: left; padding: 0.5rem; border-bottom: 2px solid black;">Verloopt</th>
-              <th style="text-align: right; padding: 0.5rem; border-bottom: 2px solid black;">Acties</th>
+              <th>Naam</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Verloopt</th>
+              <th class="text-end">Acties</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="invitation in invitations" :key="invitation.id" style="border-top: 1px solid black;">
-              <td style="padding: 0.5rem;">{{ invitation.name }}</td>
-              <td style="padding: 0.5rem;">{{ invitation.email }}</td>
-              <td style="padding: 0.5rem;">
-                <span :style="{ color: invitation.role === 'admin' ? 'red' : 'blue', fontWeight: 'bold' }">
+            <tr v-for="invitation in invitations" :key="invitation.id">
+              <td>{{ invitation.name }}</td>
+              <td>{{ invitation.email }}</td>
+              <td>
+                <span :class="invitation.role === 'admin' ? 'text-danger fw-bold' : 'text-primary fw-bold'">
                   {{ invitation.role === 'admin' ? 'Admin' : 'Gebruiker' }}
                 </span>
               </td>
-              <td style="padding: 0.5rem;">{{ formatDate(invitation.expires_at) }}</td>
+              <td>{{ formatDate(invitation.expires_at) }}</td>
               <td class="text-end">
-  <button @click="cancelInvitation(invitation.id)" class="btn btn-warning btn-sm">
-    Intrekken
-  </button>
-</td>
-
+                <button @click="cancelInvitation(invitation.id)" class="btn btn-warning btn-sm">
+                  Intrekken
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
-        
-        <div v-if="invitations.length === 0" style="padding: 1rem; text-align: center; color: #666; font-style: italic;">
+        <div v-if="invitations.length === 0" class="text-center text-muted fst-italic mt-3">
           Geen openstaande uitnodigingen
         </div>
-      </main>
-    </div>
-  </template>
+      </div>
+    </main>
+  </div>
+</template>
+
   
   <script setup>
   // These imports are for setting the foundations for the other things within the script tags

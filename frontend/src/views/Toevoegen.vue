@@ -1,54 +1,64 @@
 <template>
-  <div style="min-height: 100vh; background-color: white; margin: 0; padding: 0;">
-    
+  <div class="min-vh-100 bg-white m-0 p-0 d-flex justify-content-center align-items-start">
+    <main class="w-100 p-4 d-flex flex-column align-items-center">
+      <h2 class="mb-4">Taak aanmaken of bewerken</h2>
 
-    <!-- Formu -->
-    <main style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 2rem;">
-      <h2>Taak aanmaken of bewerken</h2>
-      <form @submit.prevent="opslaan" style="background-color: #f1c40f; padding: 2rem; width: 400px;">
-        <label style="font-weight: bold;">Titel</label>
-        <input type="text" placeholder="Vul hier een titel in" v-model="title"
-               style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+      <form @submit.prevent="opslaan" class="bg-warning p-4 rounded shadow" style="width: 100%; max-width: 500px;">
+        <!-- Titel -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Titel</label>
+          <input type="text" class="form-control" placeholder="Vul hier een titel in" v-model="title" required>
+        </div>
 
-        <label style="font-weight: bold;">Beschrijving</label>
-        <input type="text" placeholder="Vul hier een beschrijving in" v-model="description"
-               style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+        <!-- Beschrijving -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Beschrijving</label>
+          <input type="text" class="form-control" placeholder="Vul hier een beschrijving in" v-model="description" required>
+        </div>
 
-        <label style="font-weight: bold;">Status</label>
-        <select v-model="status_id" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
-          <option :value="1">Open</option>
-          <option :value="2">In behandeling</option>
-          <option :value="3">Voltooid</option>
-        </select>
+        <!-- Status -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Status</label>
+          <select class="form-select" v-model="status_id" required>
+            <option :value="1">Open</option>
+            <option :value="2">In behandeling</option>
+            <option :value="3">Voltooid</option>
+          </select>
+        </div>
 
-        <label style="font-weight: bold;">Deadline</label>
-        <input type="date" :min="today" v-model="deadline" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+        <!-- Deadline -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Deadline</label>
+          <input type="date" class="form-control" :min="today" v-model="deadline" required>
+        </div>
 
-        <label v-if="gebruiker.role === 'admin'" style="font-weight: bold;">Toewijzen aan gebruiker</label>
-        <select v-if="gebruiker.role === 'admin'" v-model="user_id" style="width: 100%; margin-bottom: 1rem;">
-        <option disabled value="">-- Kies gebruiker --</option>
-        <option v-for="g in gebruikers" :key="g.id" :value="g.id">
-        {{ g.name }}
-        </option>
-        </select>
+        <!-- Toewijzen aan gebruiker (alleen voor admin) -->
+        <div v-if="gebruiker.role === 'admin'" class="mb-3">
+          <label class="form-label fw-bold">Toewijzen aan gebruiker</label>
+          <select class="form-select" v-model="user_id" required>
+            <option disabled value="">-- Kies gebruiker --</option>
+            <option v-for="g in gebruikers" :key="g.id" :value="g.id">
+              {{ g.name }}
+            </option>
+          </select>
+        </div>
 
+        <!-- Foutmelding -->
+        <div v-if="error" class="text-danger fw-bold mb-3">
+          {{ error }}
+        </div>
 
-        <!-- It only shows this if an error occurs -->
-<div v-if="error" style="color: red; font-weight: bold; margin-bottom: 1rem;">
-  {{ error }}
-</div>
-
-<div style="text-align: center;">
-  <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1.5rem; border: none; font-weight: bold;">
-    Opslaan
-  </button>
-</div>
-
-
+        <!-- Opslaan knop -->
+        <div class="text-center">
+          <button type="submit" class="btn btn-danger fw-bold px-4">
+            Opslaan
+          </button>
+        </div>
       </form>
     </main>
   </div>
 </template>
+
 
 <script setup>
 // These imports are for setting the foundations for the other things within the script tags

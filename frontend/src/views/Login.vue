@@ -1,27 +1,33 @@
 <template>
-  <div class="p-5 rounded" style="background-color: #e8be17; width: 400px;">
-    <!--- This is placed a the top of the form -->
-    <h2 class="text-center mb-4">Inloggen</h2>
+  <div class="min-vh-200 d-flex justify-content-center align-items-center">
+    <div class="bg-warning p-5 rounded shadow" style="width: 500px;">
+      <!-- Title -->
+      <h2 class="text-center mb-4">Inloggen</h2>
 
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input v-model="email" type="email" class="form-control" placeholder="Vul hier je emailadres in" required />
+      <!-- Email input -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input v-model="email" type="email" id="email" class="form-control" placeholder="Vul hier je emailadres in" required />
+      </div>
+
+      <!-- Password input -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Wachtwoord</label>
+        <input v-model="password" type="password" id="password" class="form-control" placeholder="Vul hier je wachtwoord in" required />
+      </div>
+
+      <!-- Error message -->
+      <div class="text-danger mb-3" v-if="error">{{ error }}</div>
+
+      <!-- Login button -->
+      <button @click="handleLogin" class="btn btn-danger w-100" :disabled="authStore.loading">
+        {{ authStore.loading ? 'Bezig...' : 'Inloggen' }}
+      </button>
     </div>
-
-    <div class="mb-3">
-      <label for="password" class="form-label">Wachtwoord</label>
-      <input v-model="password" type="password" class="form-control" placeholder="Vul hier je wachtwoord in" required />
-    </div>
-
-    <!--- This displays a error if something went wrong in writing data in the form -->
-    <div class="text-danger mb-3" v-if="error">{{ error }}</div>
-
-    <!--- When you click on this button, it will show Bezig... and then you will go to /taken if everything went well -->
-    <button @click="handleLogin" class="btn btn-danger w-100" :disabled="authStore.loading">
-      {{ authStore.loading ? 'Bezig...' : 'Inloggen' }}
-    </button>
   </div>
 </template>
+
+
 
 <script setup>
 // These imports are for the functioning of the this page

@@ -1,49 +1,54 @@
 <template>
-  <!---- This is the form that the new user will get if he or she makes a new password to log in as a user ----->
-  <div style="min-height: 100vh; background-color: white; display: flex; justify-content: center; align-items: center;">
-    
-    <!-- Loading -->
-    <div v-if="laden" style="background-color: #e8be17; padding: 2rem; width: 400px; text-align: center;">
+  <div class="min-vh-100 bg-white d-flex justify-content-center align-items-center">
+
+    <!-- Laden -->
+    <div v-if="laden" class="bg-warning p-4 rounded text-center shadow" style="width: 100%; max-width: 400px;">
       <h2>Laden...</h2>
     </div>
 
-    <!-- This only shows if the invitation is invalid -->
-    <div v-else-if="!uitnodiging" style="background-color: #e8be17; padding: 2rem; width: 400px; text-align: center;">
-      <h2 style="color: red;">Ongeldige uitnodiging</h2>
+    <!-- Ongeldige uitnodiging -->
+    <div v-else-if="!uitnodiging" class="bg-warning p-4 rounded text-center shadow" style="width: 100%; max-width: 400px;">
+      <h2 class="text-danger">Ongeldige uitnodiging</h2>
       <p>Deze uitnodiging is verlopen of al gebruikt.</p>
-      <button @click="$router.push('/login')" style="background-color: red; color: white; padding: 0.5rem 1rem;">
+      <button @click="$router.push('/login')" class="btn btn-danger">
         Naar login
       </button>
     </div>
 
-    <!-- This message appears if making a new passowrd as a user went succesfully -->
-    <div v-else-if="klaar" style="background-color: #e8be17; padding: 2rem; width: 400px; text-align: center;">
-      <h2 style="color: green;">Account aangemaakt!</h2>
+    <!-- Succesvol geactiveerd -->
+    <div v-else-if="klaar" class="bg-warning p-4 rounded text-center shadow" style="width: 100%; max-width: 400px;">
+      <h2 class="text-success">Account aangemaakt!</h2>
       <p>Je kunt nu inloggen met je email en wachtwoord.</p>
-      <button @click="$router.push('/login')" style="background-color: red; color: white; padding: 0.5rem 1rem;">
+      <button @click="$router.push('/login')" class="btn btn-danger">
         Inloggen
       </button>
     </div>
 
-    <!-- Making a new password as a user -->
-    <div v-else style="background-color: #e8be17; padding: 2rem; width: 400px;">
-      <h2>Account activeren</h2>
+    <!-- Formulier om wachtwoord in te stellen -->
+    <div v-else class="bg-warning p-4 rounded shadow" style="width: 100%; max-width: 400px;">
+      <h2 class="mb-3">Account activeren</h2>
       <p><strong>Welkom {{ uitnodiging.name }}!</strong></p>
       <p>Stel hieronder je wachtwoord in:</p>
 
       <form @submit.prevent="activeren">
-        <label style="font-weight: bold;">Email</label>
-        <input :value="uitnodiging.email" disabled style="width: 100%; margin-bottom: 1rem; background-color: #f0f0f0;">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Email</label>
+          <input :value="uitnodiging.email" class="form-control" disabled>
+        </div>
 
-        <label style="font-weight: bold;">Wachtwoord</label>
-        <input v-model="wachtwoord" type="password" placeholder="Minimaal 8 tekens" style="width: 100%; margin-bottom: 1rem;">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Wachtwoord</label>
+          <input v-model="wachtwoord" type="password" class="form-control" placeholder="Minimaal 8 tekens" required>
+        </div>
 
-        <label style="font-weight: bold;">Bevestig wachtwoord</label>
-        <input v-model="bevestiging" type="password" placeholder="Herhaal je wachtwoord" style="width: 100%; margin-bottom: 1rem;">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Bevestig wachtwoord</label>
+          <input v-model="bevestiging" type="password" class="form-control" placeholder="Herhaal je wachtwoord" required>
+        </div>
 
-        <div v-if="fout" style="color: red; margin-bottom: 1rem;">{{ fout }}</div>
+        <div v-if="fout" class="text-danger mb-3">{{ fout }}</div>
 
-        <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1rem; width: 100%;">
+        <button type="submit" class="btn btn-danger w-100">
           Account activeren
         </button>
       </form>
@@ -51,6 +56,7 @@
 
   </div>
 </template>
+
 
 <script setup>
 // These imports are for setting the foundations for the other things within the script tags
